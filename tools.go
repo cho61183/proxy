@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 )
 
@@ -60,4 +61,14 @@ func CheckArgs(args []string) (string, bool) {
 		return ARGS_NUM_ERR, false
 	}
 	return ARGS_OK, true
+}
+func CheckErr(err error) int {
+	if err != nil {
+		if err.Error() == "EOF" {
+			return 0
+		}
+		log.Fatal(" error info ", err.Error())
+		return -1
+	}
+	return 1
 }

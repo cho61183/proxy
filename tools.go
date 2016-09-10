@@ -1,10 +1,8 @@
-package tools
+package main
 
 import (
 	"fmt"
 	"strconv"
-
-	"github.com/cho61183/proxy/conf"
 )
 
 /**
@@ -59,7 +57,7 @@ func ToInt(src interface{}) (dst int) {
 func CheckArgs(args []string) (string, bool) {
 	args_len := len(args)
 	if args_len != 5 {
-		return conf.ARGS_NUM_ERR, false
+		return ARGS_NUM_ERR, false
 	}
-	return conf.ARGS_OK, true
+	return ARGS_OK, true
 }

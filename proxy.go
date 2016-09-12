@@ -10,6 +10,20 @@ import (
 
 const version = "2.0"
 
+func newRedis() *ConnPool {
+	fmt.Printf("初始化 Mysql 连接池，连接数：%d \n", 10)
+	return &ConnPool{
+		MaxActive: 10,
+		//Dial: func() (*autorc.Conn, error) {
+		Dial: func() (interface{}, error) {
+			//conn := autorc.New("tcp", "", "localhost:3306", "root", "root", "test")
+			//conn.Register("set names utf8")
+			db, err := RedisDb()
+			return db, err
+		},
+	}
+}
+
 func init() {
 	//	fmt.Println("Test pool")
 	//	redisPool := &ConnPool{
@@ -22,18 +36,11 @@ func init() {
 	//	}
 	//	fmt.Println(redisPool.Get())
 	//poolNum, _ := strconv.Atoi(conf.GetValue("pool", "mysql"))
-	fmt.Printf("初始化 Mysql 连接池，连接数：%d \n", 10)
-	pool := &ConnPool{
-		MaxActive: 10,
-		//Dial: func() (*autorc.Conn, error) {
-		Dial: func() (interface{}, error) {
-			//conn := autorc.New("tcp", "", "localhost:3306", "root", "root", "test")
-			//conn.Register("set names utf8")
-			db, err := RedisDb(6379)
-			return db, err
-		},
-	}
-	fmt.Println(pool.Get())
+
+	var conn = newRedis()
+	tmp := conn.Get()
+	tmp.(*Conn).Get()
+	fmt.Println("end")
 }
 
 func main() {

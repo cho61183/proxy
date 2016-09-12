@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
-	"reflect"
+	//"fmt"
+	//"reflect"
 	"time"
 )
 
@@ -29,7 +29,7 @@ func (this *ConnPool) InitPool() error {
 	this.idle = make(chan interface{}, this.MaxActive)
 	for i := 0; i < this.MaxActive; i++ {
 		db, err := this.Dial()
-		fmt.Println(reflect.TypeOf(db))
+		//fmt.Println(reflect.TypeOf(db))
 		if err != nil {
 			return err
 		}
@@ -43,8 +43,9 @@ func (this *ConnPool) Get() interface{} {
 		this.InitPool()
 	}
 	c := <-this.idle
-	defer this.Release(c)
-	return c.(rConn).c
+	conn := c.(rConn).c
+	defer this.Release(conn)
+	return conn
 }
 func (this *ConnPool) Release(conn interface{}) {
 	this.idle <- rConn{t: nowFunc(), c: conn}
